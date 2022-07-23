@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style type="text/css" media="all">
+    * {
+  font-family: Segoe UI;
+  box-sizing: border-box;
+  margin: 0 auto;
+}
+.block {
+  color: #fff;
+  background-color: teal;
+  flex-direction: column;
+  height: 100vh; width: 100vw;
+}
+.flex , .notify, .box , .block {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: center;
+}
+h1 {
+  margin: 5px;
+  font-size: 3em;
+}
+.game--board {
+  width: 360px;
+  height: 360px;
+  margin: 5px auto;
+  border: 5px solid #000;
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow:  2px 2px 5px #000;
+  position: relative;
+}
+.box {
+  color: #fff;
+  margin: 0.5%;
+  font-size: 90px;
+  border-radius: 5px;
+  transition: all 250ms ease;
+  width: 32%; height: 32%;
+}
+.box:hover {
+  box-shadow: 1px 1px 2px teal;
+}
+.empty {
+  background-color: #eee;
+}
+.filled {
+  background-color: teal;
+} 
+.filled.red {
+  animation: win 1.5s linear 2;
+  background-color: red;
+}
+.filled.blue {
+  animation: win 1.5s linear 2;
+  background-color: blue;
+}
+@keyframes win {
+  0% {    transform: translateY(-5px);  }
+  25% {    transform: translateY(0);  }
+  50% {    transform: translateY(-5px);  }
+  75% {    transform: translateY(0);  }
+  100% {    transform: translateY(-5px);  }
+}
+.notify {
+  margin-top: 10px;
+  width: 300; height: 50px;
+  padding: 10px;
+  border: 2px solid #fff;
+  border-radius: 10px;
+  font-size: 20px;
+}
+.notify:after {
+  content: '';
+  transition: all 250ms ease;
+  animation: change 10s linear infinite;
+}
+@keyframes change {
+  0% ,49%{
+    content: 'Developed by dev_teeo ';
+  }
+  50%, 99% {
+    content: 'Follow and like 👍 on Insta @teeo_studios';
+  }
+}
+  </style>
+  <title>GameBot</title>
+</head>
+<body>
+  <div class="block">
+	<h1 align="center"> X and O </h1>
+	<div class="game--board flex">
+	  <div class="box empty" id="box1"></div>
+	  <div class="box empty" id="box2"></div>
+	  <div class="box empty" id="box3"></div>
+	  <div class="box empty" id="box4"></div>
+	  <div class="box empty" id="box5"></div>
+	  <div class="box empty" id="box6"></div>
+	  <div class="box empty" id="box7"></div>
+	  <div class="box empty" id="box8"> </div>
+	  <div class="box empty" id="box9"></div>
+	</div>
+	<div class="notify"></div>
+	</div>
+	
+	<script type="text/javascript" charset="utf-8">
+	  let qs = (e) => document.querySelector(e);
+let qsa = (e) => document.querySelectorAll(e);
+
+let empty = () => {
+  return qsa('.empty');
+};
+
+let box = () => {
+  return qsa('.box');
+};
+
+let filled = () =>{
+  return qsa('.filled');
+};
+
+let box1 = () => { return qs('#box1').innerText; };
+let box2 = () => { return qs('#box2').innerText; };
+let box3 = () => { return qs('#box3').innerText; };
+let box4 = () => { return qs('#box4').innerText; };
+let box5 = () => { return qs('#box5').innerText; };
+let box6 = () => { return qs('#box6').innerText; };
+let box7 = () => { return qs('#box7').innerText; };
+let box8 = () => { return qs('#box8').innerText; };
+let box9 = () => { return qs('#box9').innerText; };
+
+function  mark(e,f)  {
+  let b = qs('#'+e);
+  b.innerText = f;
+  b.classList.replace('empty','filled');
+  check(f);
+}
+
+function check(f) {
+   if (box1() != "" && box1() == box2() && box2() == box3()) {
+     win('#box1','#box2','#box3');
+    }
+   else if (box4() == box5() && box5() == box6() && box4() != "") {
+     win('#box4','#box5','#box6');
+   }
+   else if (box7() == box8() && box8() == box9() && box7() != "") {
+     win('#box7','#box8','#box9');
+     }
+     
+   else if (box1() == box5() && box5() == box9() && box1() != "") {
+     win('#box1','#box5','#box9');
+     }
+   else if (box3() == box5() && box5() == box7() && box3() != "") {
+     win('#box3','#box5','#box7');
+     }
+  
+   else if (box1() == box4() && box4() == box7() && box1() != "") {
+     win('#box1','#box4','#box7');
+      }
+   else if (box2() == box5() && box5() == box8() && box2() != "") { 
+     win('#box2','#box5','#box8');
+     }
+   else if (box3() == box6() && box6() == box9() && box3() != "") { 
+     win('#box3','#box6','#box9');
+     }
+   else {
+       if (f == 'X') {
+    setTimeout(function() { bot() }, 750);
+    box().forEach(g => {
+      g.style.pointerEvents = 'none';
+    });
+  } else {
+    box().forEach(g => {
+      g.style.pointerEvents = 'auto';
+    });
+  }
+   }
+}
+
+function bot() {
+   if (box1() == box2() && box2() != "" && box3() == '') {mark('box3','O') }
+   else if (box1() == box3() && box3() != "" && box2() == '') {mark('box2','O') }
+  else if (box2() == box3() && box3() != "" && box1() == '') {mark('box1','O') }
+  
+  else if (box1() == box4() && box4() != "" && box7() == '') {mark('box7','O') }
+  else if (box1() == box7() && box7() != "" && box4() == '') {mark('box4','O') }
+  else if (box4() == box7() && box7() != "" && box1() == '') {mark('box1','O') }
+
+  else if (box1() == box5() && box5() != "" && box9() == '') {mark('box9','O') }
+  else if (box1() == box9() && box9() != "" && box5() == '') {mark('box5','O') }
+  else if (box5() == box9() && box9() != "" && box1() == '') {mark('box1','O') }
+
+  else if (box5() == box7() && box7() != "" && box3() == '') {mark('box3','O') }
+  else if (box5() == box3() && box3() != "" && box7() == '') {mark('box7','O') }
+  else if (box7() == box3() && box3() != "" && box5() == '') {mark('box5','O') }
+
+  else if (box2() == box5() && box5() != "" && box8() == '') {mark('box8','O') }
+  else if (box2() == box8() && box8() != "" && box5() == '') {mark('box5','O') }
+  else if (box5() == box8() && box8() != "" && box2() == '') {mark('box2','O') }
+
+  else if (box3() == box6() && box6() != "" && box9() == '') {mark('box9','O') }
+  else if (box3() == box9() && box9() != "" && box6() == '') {mark('box6','O') }
+  else if (box6() == box9() && box9() != "" && box3() == '') {mark('box3','O') }
+
+  else if (box4() == box5() && box5() != "" && box6() == '') {mark('box6','O') }
+  else if (box5() == box6() && box5() != "" && box4() == '') {mark('box4','O') }
+  else if (box4() == box6() && box6() != "" && box5() == '') {mark('box5','O') }
+
+  else if (box7() == box8() && box8() != "" && box9() == '') {mark('box9','O') }
+  else if (box8() == box9() && box8() != "" && box7() == '') {mark('box7','O') }
+  else if (box7() == box9() && box9() != "" && box8() == '') {mark('box8','O') }
+  
+  else if (filled().length == 9) {
+    box().forEach(g => {
+      g.classList.add('red');
+    });
+    setTimeout(function() { replay() }, 3000);
+  }
+  else{
+    if (box5() == '') {
+      mark('box5','O');
+    }
+    else {
+      let l = [];
+      empty().forEach(empty => {
+        l.push(empty.id);
+      }) ;
+      b = l.sort(() => Math.random() - 0.5);
+      mark(b[0],'O');
+    }
+  }
+}
+
+function win(a,b,c) {
+  qs(a).classList.add('blue');
+  qs(b).classList.add('blue');
+  qs(c).classList.add('blue');
+  setTimeout(function() {
+    replay();
+  }, 3000);
+}
+
+function replay() {
+  filled().forEach(f => {
+    f.innerText = "";
+    f.classList.remove('red');
+    f.classList.remove('blue');
+    f.style.pointerEvents = 'auto';
+    f.classList.replace('filled','empty');
+  })
+}
+
+window.onclick = (e) => {
+  let tag = e.target;
+  if (tag.classList.contains('empty')) {
+    mark(tag.id,'X');
+  }
+};
+	</script>
+</body>
+</html>
